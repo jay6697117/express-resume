@@ -1,0 +1,27 @@
+{
+  "name": "express-resume",
+  "version": "1.0.0",
+  "description": "- 新时代：用 Express 搭建服务器",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jay6697117/express-resume.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jay6697117/express-resume/issues"
+  },
+  "homepage": "https://github.com/jay6697117/express-resume#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
