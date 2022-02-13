@@ -8,19 +8,12 @@ const express = require('express');
 const app = new express();
 
 // 指定模板存放目录
-app.set('views', path.resolve(__dirname,'./views'));
+app.set('views', path.resolve(__dirname, './views'));
 // 指定模板引擎为 Handlebars
 app.set('view engine', 'hbs');
 
-let indexMiddlewareStr;
 let contactMiddlewareStr;
 
-//主页中间件
-const indexMiddleware = (req, res, next) => {
-  const time = new Date();
-  indexMiddlewareStr = `[${time.toLocaleString()}]\n: ${req.method} ${req.url}`;
-  next();
-};
 //联系我们中间件
 const contactMiddleware = (req, res, next) => {
   const time = new Date();
@@ -29,22 +22,22 @@ const contactMiddleware = (req, res, next) => {
 };
 
 //使用中间件
-app.use(indexMiddleware);
 app.use(contactMiddleware);
 //使用静态文件服务
-app.use(express.static(path.resolve(__dirname,'./public')))
-
+app.use(express.static(path.resolve(__dirname, './public')));
 
 // 定义了主页 / index的路由
-app.get('/', indexMiddleware, (req, res) => {
-  console.log('index日志输出:', `indexMiddleware: &nbsp;&nbsp; ${indexMiddlewareStr}`);
+app.get('/', (req, res) => {
   res.render('index'); // 渲染views/index.hbs模版
 });
 
 // 定义了主页 / loggingMiddleware的路由
 app.get('/contact', contactMiddleware, (req, res) => {
-  console.log('contact日志输出:', `contactMiddleware: &nbsp;&nbsp; ${contactMiddlewareStr}`);
-  res.render('contact'); // 渲染views/contact.hbs模版
+  res.render('contact', { str: contactMiddlewareStr }); // 渲染views/contact.hbs模版
+});
+
+app.get('/api', (req, res) => {
+  res.json({ name: '图雀社区', website: 'https://tuture.co' });
 });
 
 // 定义了 broken路由
@@ -57,7 +50,7 @@ app.use('*', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('err.stack:', err.stack);
   res.status(500).render('500');
 });
 
