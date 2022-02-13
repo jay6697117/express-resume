@@ -1,10 +1,14 @@
 const path = require('path');
+const express = require('express');
+
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
+
 // 指定服务器的主机名 hostname 和端口号 port
 const hostname = 'localhost';
 const port = 3000;
 
 //创建一个 Express 服务器对象
-const express = require('express');
 const app = new express();
 
 // 指定模板存放目录
@@ -12,33 +16,10 @@ app.set('views', path.resolve(__dirname, './views'));
 // 指定模板引擎为 Handlebars
 app.set('view engine', 'hbs');
 
-let contactMiddlewareStr;
-
-//联系我们中间件
-const contactMiddleware = (req, res, next) => {
-  const time = new Date();
-  contactMiddlewareStr = `[${time.toLocaleString()}]\n: ${req.method} ${req.url}`;
-  next();
-};
-
-//使用中间件
-app.use(contactMiddleware);
 //使用静态文件服务
 app.use(express.static(path.resolve(__dirname, './public')));
-
-// 定义了主页 / index的路由
-app.get('/', (req, res) => {
-  res.render('index'); // 渲染views/index.hbs模版
-});
-
-// 定义了主页 / loggingMiddleware的路由
-app.get('/contact', contactMiddleware, (req, res) => {
-  res.render('contact', { str: contactMiddlewareStr }); // 渲染views/contact.hbs模版
-});
-
-app.get('/api', (req, res) => {
-  res.json({ name: '图雀社区', website: 'https://tuture.co' });
-});
+app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 // 定义了 broken路由
 app.get('/broken', (req, res) => {
